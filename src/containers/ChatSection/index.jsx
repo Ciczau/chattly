@@ -7,6 +7,8 @@ import { convertBase64 } from "../../components/converterBase";
 import { scaleImage } from "../../components/scaleImage";
 
 const ChatSection = ({ user, swap, changeLoaded }) => {
+  const wss = new WebSocket("ws://localhost:5000");
+
   const [message, setMessage] = useState("");
   const [friends, setFriends] = useState([]);
   const [friendss, setFriendss] = useState([]);
@@ -104,6 +106,7 @@ const ChatSection = ({ user, swap, changeLoaded }) => {
     setFiles("");
     let file_id = "";
     let miniature = "";
+    const pathe = window.location.pathname.substring("/chat/".length);
 
     try {
       const res = await axios.post(
@@ -143,11 +146,34 @@ const ChatSection = ({ user, swap, changeLoaded }) => {
         fileName: files,
         miniature: miniature,
       });
+      if (res.status === 200) {
+        wss.send(
+          JSON.stringify({
+            _id: "123321",
+            message: message,
+            sender: user.email,
+            fileId: file_id,
+            fileName: files,
+            miniature: miniature,
+            addName: res.data.addName,
+            path: path,
+          })
+        );
+      }
     } catch (err) {
       console.log(err);
     }
     GetChats();
-    GetChat();
+  };
+  wss.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+    const path = window.location.pathname.substring("/chat/".length);
+    console.log(chat);
+    if (data.path === path) {
+      delete data.path;
+      const cht = [data, ...chat];
+      setChat(cht);
+    }
   };
   const GetChat = async () => {
     if (!loaded) {
@@ -165,6 +191,7 @@ const ChatSection = ({ user, swap, changeLoaded }) => {
       console.log(err);
     }
   };
+
   const GetFriendss = async () => {
     try {
       const res = await axios.post(`${process.env.REACT_APP_URL}/friends`, {
@@ -221,16 +248,8 @@ const ChatSection = ({ user, swap, changeLoaded }) => {
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      GetDateOfLastMessage();
-    }, 500);
-    return () => {
-      clearInterval(interval);
-    };
-  });
-  useEffect(() => {
     GetChat();
-  }, [user.email, friends, idOfLastMessage, receiver]);
+  }, [user.email, friends, receiver]);
   useEffect(() => {
     GetFriends();
     GetFriendss();
@@ -244,6 +263,7 @@ const ChatSection = ({ user, swap, changeLoaded }) => {
       strink !== receiver.name ||
       avatar !== receiver.avatarGroup
     ) {
+      console.log(chatName);
       setChoosenChat(chatName);
       window.history.pushState({}, null, `/chat/${chatName}`);
       setReceiver({
@@ -671,7 +691,7 @@ const ChatSection = ({ user, swap, changeLoaded }) => {
               </div>
             </S.ChatBarWrapper>
             <S.MessageWindowWrapper pageTheme={swap}>
-              {chat &&
+              {chat.length !== 0 &&
                 chat.map((message, index) => {
                   if (message.sender === user.email) {
                     return (

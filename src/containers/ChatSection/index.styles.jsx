@@ -90,7 +90,7 @@ export const ImageWrapper = styled.img`
   @media screen and (max-width: 1023px) {
     margin-left: 10px;
     height: 6vh;
-  width: 6vh;
+    width: 6vh;
     margin-left: ${(props) => props.secondImage && "-50px"};
   }
 
@@ -98,7 +98,7 @@ export const ImageWrapper = styled.img`
     margin: 0;
     margin-left: ${(props) => props.secondImage && "-40px"};
     height: 5vh;
-  width: 5vh;
+    width: 5vh;
   }
 `;
 
@@ -430,7 +430,7 @@ export const ChangeNameWrapper = styled.div`
   justify-content: space-around;
   align-items: center;
   flex-direction: column;
-`
+`;
 
 export const ChangeNameInput = styled.input`
   outline: 0;
@@ -439,7 +439,7 @@ export const ChangeNameInput = styled.input`
   border-radius: 5px;
   box-shadow: 0px 0px 5px 3px #00000029;
   background-color: #00000030;
-`
+`;
 
 export const ChatUsers = styled.div`
   margin-top: 5px;
@@ -508,34 +508,34 @@ export const GroupUserAvatar = styled.img`
   height: 20px;
   margin: 3px;
   border-radius: 50%;
-`
+`;
 export const GroupUserName = styled.div`
   padding: 3px;
-`
+`;
 export const FilesAndImagesWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   height: 100vh;
   align-content: center;
-`
+`;
 export const FilesAndImagesMenu = styled.div`
   color: white;
   display: flex;
   justify-content: center;
-`
+`;
 export const FilesAndImagesMenuItem = styled.div`
   padding: 5px 20px;
   background-color: ${(props) => (props.choose ? "#838383" : "#464646")};
   margin: 0 5px;
-`
+`;
 export const FilesAndImagesList = styled.div`
   display: flex;
   flex-direction: column;
   height: 70vh;
   overflow-y: scroll;
   justify-content: flex-start;
-`
+`;
 export const FilesAndImagesListItem = styled.div`
   margin: 3px;
-`
+`;
